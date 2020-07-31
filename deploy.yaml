@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rabbitesting-sender
+  namespace: rabbitmq
+spec:
+  selector:
+    matchLabels:
+      app: rabbitesting
+  template:
+    metadata:
+      labels:
+        app: rabbitesting
+    spec:
+      containers:
+      - name: rabbitesting-sender
+        image: sarrufat/rabbitesting_sender:latest
+        resources:
+          limits:
+            memory: "50Mi"
+            cpu: "125m"
+        args:
+          - "definition-rabbitmq-client"
+      - name: rabbitesting-worker
+        image: sarrufat/rabbitmqk83testing_worker:latest
+        resources:
+          limits:
+            memory: "50Mi"
+            cpu: "125m"
+        args:
+          - "definition-rabbitmq-client"
+  replicas: 6
+    
